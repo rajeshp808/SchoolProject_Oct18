@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "719593161947",
+    "firebase_url": "https://zphschoolemani-d3d13.firebaseio.com",
+    "project_id": "zphschoolemani-d3d13",
+    "storage_bucket": "zphschoolemani-d3d13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719593161947:android:6e5e44d475ddd2b9",
+        "android_client_info": {
+          "package_name": "com.rajesh.zphschoolemani"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719593161947-tllf3t9ra41vo1tsvc8rs8df69qoi6dd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rajesh.zphschoolemani",
+            "certificate_hash": "3c2246473c57fed21d900909e83988717201eb85"
+          }
+        },
+        {
+          "client_id": "719593161947-1fdbrknuh37ck1kqrp5m59n0eqkuvj17.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rajesh.zphschoolemani",
+            "certificate_hash": "b390ed9990677e59275b21669ddb47114df5098f"
+          }
+        },
+        {
+          "client_id": "719593161947-mh0dio6onmqf4cbvggvj6vr1c0b3pobu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmdof4PjvU19J7Uh0jydqCkpKQtWjfnfM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719593161947-mh0dio6onmqf4cbvggvj6vr1c0b3pobu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
