@@ -17,6 +17,9 @@
     <string name="AddNewsPost">Add News Post</string>
     <string name="AddAnnouncement">Add Announcement</string>
     <string name="tvaddAnnouncement">Add Your Announcement</string>
+    <string name="newspost_hint_description">Add Description of your news post</string>
+    <string name="newspost_hint_title">Add Title</string>
+    <string name="newspost_submit_btn_label">Post</string>
 
 
     <string-array name="spin_SSC_year_values">
@@ -90,5 +93,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="postnews_head">    Post Your News</string>
     <string name="post_your_news">Post Your News</string>
+    <string name="ImageButton_Add">Adding image</string>
+    <string name="post_news_texthead">*********Post Your News**********</string>
 
 </resources>
