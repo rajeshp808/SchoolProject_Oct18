@@ -14,6 +14,9 @@
     <string name="about">About</string>
     <string name="menu_Help">Help</string>
     <string name="ContentDescription">ZPHS Images</string>
+    <string name="AddNewsPost">Add News Post</string>
+    <string name="AddAnnouncement">Add Announcement</string>
+    <string name="tvaddAnnouncement">Add Your Announcement</string>
 
 
     <string-array name="spin_SSC_year_values">
@@ -81,5 +84,11 @@
         <item>1958</item>
         <item>1957</item>
     </string-array>
+
+    <string name="title_activity_fullscreen">News Home</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="postnews_head">    Post Your News</string>
+    <string name="post_your_news">Post Your News</string>
 
 </resources>

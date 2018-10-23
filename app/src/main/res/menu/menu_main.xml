@@ -22,20 +22,27 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.944"
         tools:ignore="MissingConstraints" />
-
+    <item
+        android:id="@+id/menu_add_newspost"
+        android:orderInCategory="102"
+        android:title="@string/AddNewsPost" />
+    <item
+        android:id="@+id/menu_add_announcement"
+        android:orderInCategory="103"
+        android:title="@string/AddAnnouncement" />
     <item
         android:id="@+id/menu_Help"
-        android:orderInCategory="102"
+        android:orderInCategory="104"
         android:title="@string/menu_Help" />
     <item
         android:id="@+id/menu_About"
-        android:orderInCategory="103"
+        android:orderInCategory="105"
         android:title="@string/about" />
     <item
         android:id="@+id/menu_Exit"
         android:checkable="false"
         android:enabled="true"
-        android:orderInCategory="104"
+        android:orderInCategory="106"
         android:title="@string/exit_app"
         android:visible="true" />
 </menu>

@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     String latitude = "16.3264";
                     String longitude = "80.6560";
                     intent = new Intent(Intent.ACTION_VIEW);
-                   // intent.setData(Uri.parse("geo:16.3264,80.6560?z=16"));
+                    // intent.setData(Uri.parse("geo:16.3264,80.6560?z=16"));
                     intent.setData(Uri.parse("geo:0,0?q=16.3264,80.6560(ZPH School Emani)"));
                     intent.setPackage("com.google.android.apps.maps");
 
@@ -107,17 +107,16 @@ public class MainActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(), "Location to be added", Toast.LENGTH_LONG).show();
                 }
             });
-        } catch(Exception ex) {
-            Toast.makeText(getApplicationContext(), "Exception raised in my APP"+ex.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (Exception ex) {
+            Toast.makeText(getApplicationContext(), "Exception raised in my APP" + ex.getMessage(), Toast.LENGTH_LONG).show();
             ex.printStackTrace();
         }
-
 
 
     }
 
     private boolean isKYCReq() {
-        boolean isfile_not_existed=false;
+        boolean isfile_not_existed = false;
         try {
             File sd = Environment.getExternalStorageDirectory();
             String Fileprefix = "zphschool_";
@@ -128,20 +127,21 @@ public class MainActivity extends AppCompatActivity {
                 for (File file : allfiles) {
                     if (file.getName().startsWith("zphschool_")) {
                         isfile_not_existed = true;
-                       // Toast.makeText(getApplicationContext(), "File found", Toast.LENGTH_LONG).show();
+                        // Toast.makeText(getApplicationContext(), "File found", Toast.LENGTH_LONG).show();
                         break;
                     }
                 }
             }
-        } catch (Exception ex){
-            Toast.makeText(getApplicationContext(), "Exception in Finding KYC file"+ex.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (Exception ex) {
+            Toast.makeText(getApplicationContext(), "Exception in Finding KYC file" + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
-       // Toast.makeText(getApplicationContext(), "isfile_existed "+isfile_not_existed, Toast.LENGTH_LONG).show();
+        // Toast.makeText(getApplicationContext(), "isfile_existed "+isfile_not_existed, Toast.LENGTH_LONG).show();
         return isfile_not_existed;
     }
 
     /**
      * Check for network connection
+     *
      * @return
      */
     private boolean haveNetworkConnection() {
@@ -154,12 +154,12 @@ public class MainActivity extends AppCompatActivity {
             if (ni.getTypeName().equalsIgnoreCase("WIFI")) {
                 if (ni.isConnected())
                     haveConnectedWifi = true;
-              //  Toast.makeText(getApplicationContext(),"haveConnectedWifi "+haveConnectedWifi,Toast.LENGTH_LONG).show();
+                //  Toast.makeText(getApplicationContext(),"haveConnectedWifi "+haveConnectedWifi,Toast.LENGTH_LONG).show();
             }
             if (ni.getTypeName().equalsIgnoreCase("MOBILE")) {
                 if (ni.isConnected())
                     haveConnectedMobile = true;
-            //    Toast.makeText(getApplicationContext(),"haveConnectedMobile "+haveConnectedMobile,Toast.LENGTH_LONG).show();
+                //    Toast.makeText(getApplicationContext(),"haveConnectedMobile "+haveConnectedMobile,Toast.LENGTH_LONG).show();
 
             }
         }
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             if (checkPermission()) {
                 //If your app has access to the device’s storage, then print the following message to Android Studio’s Logcat//
                 Log.d("Write Permission", "Permission already granted.");
-             //   Toast.makeText(getApplicationContext(),"Permission already granted",Toast.LENGTH_LONG).show();
+                //   Toast.makeText(getApplicationContext(),"Permission already granted",Toast.LENGTH_LONG).show();
             } else {
                 //If your app doesn’t have permission to access external storage, then call requestPermission//
                 requestPermission();
@@ -194,9 +194,11 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
+
     private void requestPermission() {
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -213,17 +215,24 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_Exit) {
-            Toast.makeText(MainActivity.this,"Exiting Applicattion", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Exiting Applicattion", Toast.LENGTH_SHORT).show();
             finish();
             return true;
-        } else if(id == R.id.menu_Help) {
+        } else if (id == R.id.menu_Help) {
             //startActivity(new Intent(MainActivity.this,Helper.class));
-            Toast.makeText(MainActivity.this,"This application HELP menu. ", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "This application HELP menu. ", Toast.LENGTH_LONG).show();
 
-        } else  if(id == R.id.menu_About) {
-            Toast.makeText(MainActivity.this,"This application is designed for Alumni of Z.P.High School Emani." +
+        } else if (id == R.id.menu_About) {
+            Toast.makeText(MainActivity.this, "This application is designed for Alumni of Z.P.High School Emani." +
                     " You will find latest news and announcements from the school. Designed & Devloped by Rajesh Perakalapudi.", Toast.LENGTH_LONG).show();
+        }  else if(id ==R.id.menu_add_newspost) {
+            Intent news_intent = new Intent(MainActivity.this, postnews.class);
+            startActivity(news_intent);
+        } else if(id== R.id.menu_add_announcement) {
+            Intent ann_intent = new Intent(MainActivity.this, add_announcement.class);
+            startActivity(ann_intent);
         }
+
 
         return super.onOptionsItemSelected(item);
     }
