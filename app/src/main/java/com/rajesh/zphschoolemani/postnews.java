@@ -1,5 +1,6 @@
 package com.rajesh.zphschoolemani;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,15 +25,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.UUID;
+
 public class postnews extends AppCompatActivity {
-    private ImageButton imageBtn; private static final int GALLERY_REQUEST_CODE = 2;
-    private Uri uri = null; private EditText textTitle; private EditText textDesc;
-    private Button postBtn; private StorageReference storage; private FirebaseDatabase database;
-    private DatabaseReference databaseRef; private FirebaseAuth mAuth;
+    private ImageButton imageBtn;
+    private static final int GALLERY_REQUEST_CODE = 2;
+    private Uri uri = null;
+    private EditText textTitle; private EditText textDesc;
+    private Button postBtn;
+     private FirebaseDatabase database;
+    private DatabaseReference databaseRef;
+    private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseUsers; private FirebaseUser mCurrentUser;
+    private StorageReference storageRef;
+    ProgressDialog pd_postnews;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -39,70 +50,77 @@ public class postnews extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_postnews);
-        Toast.makeText(getApplicationContext(), "postnews starts", Toast.LENGTH_LONG).show();
+
         // initialize layout object
 
         postBtn = (Button) findViewById(R.id.bt_postbutton);
         textDesc = (EditText) findViewById(R.id.et_News_Description);
         textTitle = (EditText) findViewById(R.id.et_NewsTitle);
-        storage = FirebaseStorage.getInstance().getReference();
-        databaseRef = database.getInstance().getReference().child("News");
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        storageRef= storage.getReferenceFromUrl("gs://zphschoolemani-d3d13.appspot.com");
+        database = FirebaseDatabase.getInstance();
+        databaseRef =  database.getReference("News");
+            pd_postnews = new ProgressDialog(this);
+
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
-        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
+        //mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
         imageBtn = (ImageButton) findViewById(R.id.imageButton);
         //picking image from gallery
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Toast.makeText(getApplicationContext(), "Select pic to upload", Toast.LENGTH_LONG).show();
                 Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 galleryIntent.setType("image/*");
-                startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
+                startActivityForResult(Intent.createChooser(galleryIntent, "Select Picture"), GALLERY_REQUEST_CODE);
             }
         });
         // posting to Firebase
         postBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(postnews.this, "POSTING…", Toast.LENGTH_LONG).show();
+
+
                 final String PostTitle = textTitle.getText().toString().trim();
                 final String PostDesc = textDesc.getText().toString().trim();
                 // do a check for empty fields
-                if (!TextUtils.isEmpty(PostDesc) && !TextUtils.isEmpty(PostTitle)) {
-                    StorageReference filepath = storage.child("post_images").child(uri.getLastPathSegment());
-                    filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            @SuppressWarnings("VisibleForTests")
-                            //getting the post image download url
-                            final Task<Uri> downloadUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl();
-                            Toast.makeText(getApplicationContext(), "Succesfully Uploaded", Toast.LENGTH_SHORT).show();
-                            final DatabaseReference newPost = databaseRef.push();
-                            //adding post contents to database reference
-                            mDatabaseUsers.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    newPost.child("title").setValue(PostTitle);
-                                    newPost.child("desc").setValue(PostDesc);
-                                    newPost.child("imageUrl").setValue(downloadUrl.toString());
-                                    newPost.child("uid").setValue(mCurrentUser.getUid());
-                                    newPost.child("username").setValue(dataSnapshot.child("name").getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Intent intent = new Intent(postnews.this, MainActivity.class);
-                                                startActivity(intent);
-                                            }
-                                        }
-                                    });
-                                }
+                if (!TextUtils.isEmpty(PostDesc) && !TextUtils.isEmpty(PostTitle) && uri !=null ) {
 
+                    Toast.makeText(postnews.this, "POSTING…", Toast.LENGTH_LONG).show();
+                    //StorageReference filepath = storageRef.child("newsimg").child(uri.getLastPathSegment());
+                    //Toast.makeText(postnews.this, "select pic is"+uri.getLastPathSegment().toString(), Toast.LENGTH_LONG).show();
+
+                    pd_postnews.setTitle("Uploading...");
+                    pd_postnews.show();
+                    String randomString=UUID.randomUUID().toString();
+                    StorageReference ref = storageRef.child("newsimg/"+ randomString);
+                    ref.putFile(uri)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
-                                public void onCancelled(DatabaseError databaseError) {
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    pd_postnews.dismiss();
+                                    Toast.makeText(postnews.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    pd_postnews.dismiss();
+                                    Toast.makeText(postnews.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                    double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                            .getTotalByteCount());
+                                    pd_postnews.setMessage("Uploaded "+(int)progress+"%");
                                 }
                             });
-                        }
-                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Title or Description should not be left blank.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -119,6 +137,7 @@ public class postnews extends AppCompatActivity {
  if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK){
  uri = data.getData();
  imageBtn.setImageURI(uri);
+
  }
  }
 }

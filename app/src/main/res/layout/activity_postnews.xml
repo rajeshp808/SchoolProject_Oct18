@@ -36,14 +36,15 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@drawable/edittext_corners"
         android:hint="@string/newspost_hint_title"
         android:inputType="textPersonName"
-        android:textColor="@color/colorAccent"
-        android:background="@drawable/edittext_corners"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         app:layout_constraintBottom_toTopOf="@+id/et_News_Description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent" />
+
     <EditText
         android:id="@+id/et_News_Description"
         android:layout_width="224dp"
@@ -53,13 +54,13 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp"
-        android:ems="10"
-
-        android:hint="@string/newspost_hint_description"
-        android:inputType="textMultiLine"
         android:background="@drawable/edittext_corners"
 
-        android:textColor="@color/colorAccent"
+        android:ems="10"
+        android:hint="@string/newspost_hint_description"
+        android:inputType="textMultiLine"
+
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         app:layout_constraintBottom_toTopOf="@+id/bt_postbutton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

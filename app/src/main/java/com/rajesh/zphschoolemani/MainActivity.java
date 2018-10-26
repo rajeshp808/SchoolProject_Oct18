@@ -42,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
             Toast.makeText(getApplicationContext(), "App Started", Toast.LENGTH_LONG).show();
-            requestPermission();
             checkAppPermissions();
+            requestPermission();
+
             //check for Internet and then login action
             if (haveNetworkConnection() && !isKYCReq()) {
                 Intent intent = new Intent(MainActivity.this, LoginPage.class);
@@ -179,13 +180,17 @@ public class MainActivity extends AppCompatActivity {
                 //If your app doesn’t have permission to access external storage, then call requestPermission//
                 requestPermission();
             }
+        } else {
+            Toast.makeText(getApplicationContext(), "check app permission not done", Toast.LENGTH_LONG).show();
         }
+
     }
 
 
     public boolean checkPermission() {
         //Check for READ_EXTERNAL_STORAGE access, using ContextCompat.checkSelfPermission()//
         int result = ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        Toast.makeText(getApplicationContext(), "checking permissions.. "+result, Toast.LENGTH_LONG).show();
         //If the app does have this permission, then return true//
         if (result == PackageManager.PERMISSION_GRANTED) {
             return true;
@@ -196,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestPermission() {
+
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
 
