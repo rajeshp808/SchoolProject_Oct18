@@ -93,7 +93,10 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="postnews_head">    Post Your News</string>
     <string name="post_your_news">Post Your News</string>
+    <string name="post_your_announcements">Post Your Announcements</string>
     <string name="ImageButton_Add">Adding image</string>
+    <string name="ann_hint_description">Add Announcement description</string>
+    <string name="ann_hint_title">Add Title of your announcement</string>
     <string name="post_news_texthead">*********Post Your News**********</string>
 
 </resources>

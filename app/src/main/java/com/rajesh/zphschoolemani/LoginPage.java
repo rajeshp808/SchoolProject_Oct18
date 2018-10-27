@@ -91,7 +91,7 @@ public class LoginPage extends AppCompatActivity {
                     // Write a message to the database
                     String phoneNumber = et_phone.getText().toString();
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference rootRef = database.getReference("zphschoolemani-d3d13/Alumn_List");
+                    DatabaseReference rootRef = database.getReference("Alumn_List");
                     DatabaseReference usersRef = rootRef.child(phoneNumber);
 
                     saveData = et_phone.getText() + "#" + et_Name.getText();
