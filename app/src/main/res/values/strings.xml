@@ -98,5 +98,7 @@
     <string name="ann_hint_description">Add Announcement description</string>
     <string name="ann_hint_title">Add Title of your announcement</string>
     <string name="post_news_texthead">*********Post Your News**********</string>
+    <string name="nc_text_title">News card</string>
+    <string name="tv_nc_description">view news description</string>
 
 </resources>
