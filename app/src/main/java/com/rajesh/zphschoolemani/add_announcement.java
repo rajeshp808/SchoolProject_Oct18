@@ -16,8 +16,6 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -38,8 +36,7 @@ public class add_announcement extends AppCompatActivity {
     private Button postBtn;
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabaseUsers; private FirebaseUser mCurrentUser;
+    private DatabaseReference mDatabaseUsers;
     private StorageReference storageRef;
     ProgressDialog pd_postnews;
     @Override
@@ -61,8 +58,6 @@ public class add_announcement extends AppCompatActivity {
             databaseRef =  database.getReference("Announcements");
             pd_postnews = new ProgressDialog(this);
 
-            mAuth = FirebaseAuth.getInstance();
-            mCurrentUser = mAuth.getCurrentUser();
             //mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
             imageBtn = (ImageButton) findViewById(R.id.animgButton);
             //picking image from gallery

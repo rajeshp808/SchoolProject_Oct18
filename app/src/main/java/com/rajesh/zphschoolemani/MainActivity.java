@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
             ib_news.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), "News to be added", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "News starting", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(MainActivity.this, viewnews.class));
                 }
             });
             ib_gallery.setOnClickListener(new View.OnClickListener() {
