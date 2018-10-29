@@ -97,15 +97,24 @@ public class postnews extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    pd_postnews.dismiss();
-                                    final Task<Uri> downloadURL=ref.getDownloadUrl();
-                                    DatabaseReference newsItem = databaseRef.child(randomString);
-                                    Map<String, Object> taskMap = new HashMap<>();
-                                    taskMap.put("News_Title", textTitle.getText().toString());
-                                    taskMap.put("News_Description", textDesc.getText().toString());
-                                    taskMap.put("File_URL", downloadURL.toString());
-                                    newsItem.updateChildren(taskMap);
-                                    Toast.makeText(postnews.this, "Uploaded"+downloadURL.toString(), Toast.LENGTH_SHORT).show();
+                                   try {
+
+                                       Uri downloadURL ;
+                                       Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                                       while (!urlTask.isSuccessful());
+                                        downloadURL = urlTask.getResult();
+                                       DatabaseReference newsItem = databaseRef.child(randomString);
+                                       Map<String, Object> taskMap = new HashMap<>();
+                                       taskMap.put("News_Title", textTitle.getText().toString());
+                                       taskMap.put("News_Description", textDesc.getText().toString());
+                                       taskMap.put("File_URL", downloadURL.toString());
+                                       newsItem.updateChildren(taskMap);
+                                       pd_postnews.dismiss();
+                                       Toast.makeText(postnews.this, "Upload completed, Please check the News Section" , Toast.LENGTH_LONG).show();
+                                       finish();
+                                   }catch (Exception ex) {
+                                       Toast.makeText(postnews.this, "exception after uploa…" + ex.getMessage(), Toast.LENGTH_LONG).show();
+                                   }
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -122,7 +131,13 @@ public class postnews extends AppCompatActivity {
                                             .getTotalByteCount());
                                     pd_postnews.setMessage("Uploaded "+(int)progress+"%");
                                 }
-                            });
+                            }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                            //Toast.makeText(postnews.this, "completed" , Toast.LENGTH_LONG).show();
+                        }
+                    });
                 } else {
                     Toast.makeText(getApplicationContext(), "Title or Description should not be left blank.", Toast.LENGTH_LONG).show();
                 }

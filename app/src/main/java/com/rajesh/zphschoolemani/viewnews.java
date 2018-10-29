@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -27,12 +29,17 @@ public class viewnews extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewnews);
         //initialize recyclerview and FIrebase objects
-        recyclerView = (RecyclerView)findViewById(R.id.id_recycle_news);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("News");
-        mDatabase.keepSynced(true);
-
+        try {
+            recyclerView = (RecyclerView) findViewById(R.id.id_recycle_news);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setHasFixedSize(true);
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("News");
+            mDatabase.keepSynced(true);
+            Log.d("sowmore", "starting");
+        }catch (Exception ex) {
+            Log.d("sowmuch4", "error in onCreate"+ex.getMessage());
+            ex.printStackTrace();
+        }
 
 
     }
@@ -41,36 +48,57 @@ public class viewnews extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
 
-        FirebaseRecyclerAdapter<NewsData,NewsDataViewHolder> adapter = new FirebaseRecyclerAdapter<NewsData, NewsDataViewHolder>
-                (NewsData.class,R.layout.activity_newscard,NewsDataViewHolder.class,mDatabase) {
+        FirebaseRecyclerAdapter<Newsdata,NewsdataViewHolder> adapter = new FirebaseRecyclerAdapter<Newsdata, NewsdataViewHolder>
+                (Newsdata.class,R.layout.activity_newscard,NewsdataViewHolder.class,mDatabase) {
+
             @Override
-            protected void populateViewHolder(NewsDataViewHolder viewHolder, NewsData model, int position) {
-                viewHolder.setTitle(model.getTitle());
-                viewHolder.setDescription(model.getDesc());
-                viewHolder.setImage(getApplicationContext(),model.getImageUrl());
+            protected void populateViewHolder(NewsdataViewHolder viewHolder, Newsdata model, int position) {
+                try {
+                    viewHolder.setTitle(model.getNews_Title());
+                    viewHolder.setDescription(model.getNews_Description());
+
+                    viewHolder.setImage(getApplicationContext(), model.getFile_URL());
+                } catch (Exception ex) {
+                    Log.d("sowmuch3", "error in populateViewHolder"+ex.getMessage());
+                    ex.printStackTrace();
+                }
             }
         };
         recyclerView.setAdapter(adapter);
     }
 
-   public static class NewsDataViewHolder extends RecyclerView.ViewHolder {
-        View mView;
+   public static class NewsdataViewHolder extends RecyclerView.ViewHolder {
+       View mView;
 
-       public NewsDataViewHolder(@NonNull View itemView) {
+       public NewsdataViewHolder( View itemView) {
            super(itemView);
-           mView=itemView;
+           mView = itemView;
+     }
+
+           public void setTitle (String News_Title) {
+               try {
+                   TextView tv_nc_title = (TextView) mView.findViewById(R.id.tv_nc_title);
+                   tv_nc_title.setText(News_Title);
+
+               }catch (Exception ex) {
+                   Log.d("sowmuch", "error in setting title"+ex.getMessage());
+                   ex.printStackTrace();
+               }
+           }
+           public void setDescription (String News_Description){
+           try {
+               TextView tv_nc_description = (TextView) mView.findViewById(R.id.tv_nc_description);
+               tv_nc_description.setText(News_Description);
+           }catch (Exception ex) {
+               Log.d("sowmuch2", "error in setting desc"+ex.getMessage());
+               ex.printStackTrace();
+           }
        }
-       public void setTitle(String News_Title) {
-           TextView tv_nc_title=(TextView)mView.findViewById(R.id.tv_nc_title);
-           tv_nc_title.setText(News_Title);
-       }
-       public void setDescription(String News_Description) {
-           TextView tv_nc_description=(TextView)mView.findViewById(R.id.tv_nc_description);
-           tv_nc_description.setText(News_Description);
-       }
-       public void setImage(Context ctx, String File_URL) {
-           ImageView imageView4=(ImageView)mView.findViewById(R.id.imageView4);
+           public void setImage (Context ctx, String File_URL){
+           ImageView imageView4 = (ImageView) mView.findViewById(R.id.imageView4);
+
            Picasso.with(ctx).load(File_URL).into(imageView4);
        }
+
    }
 }

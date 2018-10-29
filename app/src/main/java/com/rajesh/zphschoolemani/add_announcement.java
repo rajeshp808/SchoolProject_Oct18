@@ -94,22 +94,27 @@ public class add_announcement extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        pd_postnews.dismiss();
-                                        final Task<Uri> downloadURL=ref.getDownloadUrl();
+
+                                        Uri downloadURL ;
+                                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                                        while (!urlTask.isSuccessful());
+                                        downloadURL = urlTask.getResult();
                                         DatabaseReference newsItem = databaseRef.child(randomString);
                                         Map<String, Object> taskMap = new HashMap<>();
                                         taskMap.put("Announcement_Title", textTitle.getText().toString());
                                         taskMap.put("Announcement_Title_Description", textDesc.getText().toString());
                                         taskMap.put("File_URL", downloadURL.toString());
                                         newsItem.updateChildren(taskMap);
-                                        Toast.makeText(add_announcement.this, "Uploaded"+downloadURL.toString(), Toast.LENGTH_SHORT).show();
+                                        pd_postnews.dismiss();
+                                        Toast.makeText(add_announcement.this, "Upload completed", Toast.LENGTH_SHORT).show();
+                                        finish();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         pd_postnews.dismiss();
-                                        Toast.makeText(add_announcement.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(add_announcement.this, "Failed to upload: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 })
                                 .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -117,7 +122,7 @@ public class add_announcement extends AppCompatActivity {
                                     public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                                         double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
                                                 .getTotalByteCount());
-                                        pd_postnews.setMessage("Uploaded "+(int)progress+"%");
+                                        pd_postnews.setMessage("Uploading "+(int)progress+"%");
                                     }
                                 });
                     } else {
