@@ -9,7 +9,17 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/id_recycle_news"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
+        style="@style/CardView.Dark"
+        android:layout_width="378dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/sunsetblue"
+        android:fadingEdge="vertical"
+        android:fadingEdgeLength="@dimen/cardview_default_elevation"
+        android:layerType="software"
+        android:orientation="vertical"
+        android:scrollbars="vertical"
+        android:visibility="visible"></android.support.v7.widget.RecyclerView>
 </RelativeLayout>
