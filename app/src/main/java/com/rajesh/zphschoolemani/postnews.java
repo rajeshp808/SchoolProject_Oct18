@@ -109,6 +109,7 @@ public class postnews extends AppCompatActivity {
                                        taskMap.put("News_Description", textDesc.getText().toString());
                                        taskMap.put("File_URL", downloadURL.toString());
                                        newsItem.updateChildren(taskMap);
+
                                        pd_postnews.dismiss();
                                        Toast.makeText(postnews.this, "Upload completed, Please check the News Section" , Toast.LENGTH_LONG).show();
                                        finish();

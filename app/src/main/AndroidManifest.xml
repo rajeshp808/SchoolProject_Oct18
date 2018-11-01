@@ -25,8 +25,9 @@
         <activity android:name=".Gallery" />
         <activity android:name=".add_announcement" />
         <activity android:name=".postnews" />
+        <activity android:name=".viewnews" />
+        <activity android:name=".viewannouncement" />
 
-        <activity android:name=".viewnews"></activity>
     </application>
 
 </manifest>

@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
             ib_announcement.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), "Announcements to be added now", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Announcements starting", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(MainActivity.this, viewannouncement.class));
                 }
             });
             ib_news.setOnClickListener(new View.OnClickListener() {

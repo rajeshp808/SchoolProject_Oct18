@@ -48,7 +48,7 @@ public class viewnews extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
 
-        FirebaseRecyclerAdapter<Newsdata,NewsdataViewHolder> adapter = new FirebaseRecyclerAdapter<Newsdata, NewsdataViewHolder>
+        FirebaseRecyclerAdapter<Newsdata,NewsdataViewHolder> news_adapter = new FirebaseRecyclerAdapter<Newsdata, NewsdataViewHolder>
                 (Newsdata.class,R.layout.activity_newscard,NewsdataViewHolder.class,mDatabase) {
 
             @Override
@@ -64,7 +64,7 @@ public class viewnews extends AppCompatActivity {
                 }
             }
         };
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(news_adapter);
     }
 
    public static class NewsdataViewHolder extends RecyclerView.ViewHolder {

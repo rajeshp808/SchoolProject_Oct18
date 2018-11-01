@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context="com.rajesh.zphschoolemani.viewnews">
+    tools:context="com.rajesh.zphschoolemani.viewannouncement">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/id_recycle_news"
+        android:id="@+id/id_recycle_announce"
         style="@style/CardView.Dark"
         android:layout_width="363dp"
         android:layout_height="491dp"
