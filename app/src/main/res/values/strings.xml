@@ -101,4 +101,6 @@
     <string name="nc_text_title">News card</string>
     <string name="tv_nc_description">view news description</string>
     <string name="appbar_scrolling_view_behavior">appbar_scrolling_view_behavior</string>
+    <string name="profile_home_wall">zphschool_Assembly</string>
+    <string name="profile_name">Your Name</string>
 </resources>

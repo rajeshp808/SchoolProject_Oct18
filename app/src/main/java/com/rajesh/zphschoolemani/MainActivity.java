@@ -35,13 +35,14 @@ public class MainActivity extends AppCompatActivity {
     ImageButton ib_news;
     ImageButton ib_gallery;
     ImageButton ib_location;
+    private static  String phone_key="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
-            Toast.makeText(getApplicationContext(), "App Started", Toast.LENGTH_LONG).show();
+
             checkAppPermissions();
             requestPermission();
 
@@ -62,7 +63,10 @@ public class MainActivity extends AppCompatActivity {
             ib_alumn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), "Alumn button to be done", Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(MainActivity.this, alumnhome.class);
+                    intent.putExtra("phone_key", phone_key);
+                    startActivity(intent);
                 }
             });
 
@@ -111,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } catch (Exception ex) {
+            Log.d("Debug", "sowmuch-onCreate: exception: "+ex.getMessage());
             Toast.makeText(getApplicationContext(), "Exception raised in my APP" + ex.getMessage(), Toast.LENGTH_LONG).show();
             ex.printStackTrace();
         }
@@ -119,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isKYCReq() {
-        boolean isfile_not_existed = false;
+        boolean isfile_existed = false;
         try {
             File sd = Environment.getExternalStorageDirectory();
             String Fileprefix = "zphschool_";
@@ -129,7 +134,11 @@ public class MainActivity extends AppCompatActivity {
 
                 for (File file : allfiles) {
                     if (file.getName().startsWith("zphschool_")) {
-                        isfile_not_existed = true;
+                        isfile_existed = true;
+                        String split_filename[] = file.getName().split("_");
+                        if(split_filename.length>1)
+                            phone_key=split_filename[1];
+
                         // Toast.makeText(getApplicationContext(), "File found", Toast.LENGTH_LONG).show();
                         break;
                     }
@@ -139,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Exception in Finding KYC file" + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
         // Toast.makeText(getApplicationContext(), "isfile_existed "+isfile_not_existed, Toast.LENGTH_LONG).show();
-        return isfile_not_existed;
+        return isfile_existed;
     }
 
     /**
@@ -192,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean checkPermission() {
         //Check for READ_EXTERNAL_STORAGE access, using ContextCompat.checkSelfPermission()//
         int result = ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        Toast.makeText(getApplicationContext(), "checking permissions.. "+result, Toast.LENGTH_LONG).show();
+       // Toast.makeText(getApplicationContext(), "checking permissions.. "+result, Toast.LENGTH_LONG).show();
         //If the app does have this permission, then return true//
         if (result == PackageManager.PERMISSION_GRANTED) {
             return true;

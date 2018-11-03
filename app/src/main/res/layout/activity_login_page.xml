@@ -40,7 +40,6 @@
         android:fadingEdge="horizontal|vertical"
         android:filterTouchesWhenObscured="true"
         android:focusable="auto"
-        android:fontFamily="sans-serif"
         android:hapticFeedbackEnabled="true"
         android:text="@string/submit"
         android:textColor="@android:color/holo_red_dark"
@@ -50,21 +49,22 @@
         app:layout_constraintStart_toStartOf="parent"
         android:drawableRight="@android:drawable/ic_menu_save" />
 
-    <ImageView
-        android:id="@+id/imageView"
+    <ImageButton
+        android:id="@+id/ib_add_prof_pic"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:scaleType="fitCenter"
         android:contentDescription="@string/todo"
         app:layout_constraintBottom_toTopOf="@+id/et_phno"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.271"
-        app:srcCompat="@drawable/app_logo" />
+        app:srcCompat="@drawable/profpic_blue" />
 
     <EditText
         android:id="@+id/et_Name"
@@ -105,7 +105,6 @@
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="none"
         android:textAlignment="gravity"
-        android:textDirection="anyRtl"
         android:verticalScrollbarPosition="right"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/button"

@@ -2,11 +2,14 @@ package com.rajesh.zphschoolemani;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +30,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -39,7 +43,6 @@ public class postnews extends AppCompatActivity {
     private Button postBtn;
      private FirebaseDatabase database;
     private DatabaseReference databaseRef;
-    private DatabaseReference mDatabaseUsers;
     private StorageReference storageRef;
     ProgressDialog pd_postnews;
     @Override
@@ -61,7 +64,6 @@ public class postnews extends AppCompatActivity {
         databaseRef =  database.getReference("News");
             pd_postnews = new ProgressDialog(this);
 
-        //mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
         imageBtn = (ImageButton) findViewById(R.id.imageButton);
         //picking image from gallery
         imageBtn.setOnClickListener(new View.OnClickListener() {
@@ -109,8 +111,9 @@ public class postnews extends AppCompatActivity {
                                        taskMap.put("News_Description", textDesc.getText().toString());
                                        taskMap.put("File_URL", downloadURL.toString());
                                        newsItem.updateChildren(taskMap);
-
-                                       pd_postnews.dismiss();
+                                       if (pd_postnews != null && pd_postnews.isShowing()) {
+                                           pd_postnews.dismiss();
+                                       }
                                        Toast.makeText(postnews.this, "Upload completed, Please check the News Section" , Toast.LENGTH_LONG).show();
                                        finish();
                                    }catch (Exception ex) {
@@ -145,6 +148,7 @@ public class postnews extends AppCompatActivity {
             }
         });
     } catch (Exception ex) {
+            Log.d("Debug", "sowmuch:postnews exception:"+ex.getMessage());
             Toast.makeText(getApplicationContext(), "Exception at postnews "+ex.getMessage(), Toast.LENGTH_LONG).show();
             ex.printStackTrace();
         }
@@ -155,8 +159,18 @@ public class postnews extends AppCompatActivity {
  super.onActivityResult(requestCode, resultCode, data);
  //image from gallery result
  if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK){
- uri = data.getData();
- imageBtn.setImageURI(uri);
+
+     try {
+         uri = data.getData();
+         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+         // Log.d(TAG, String.valueOf(bitmap));
+
+         imageBtn.setImageBitmap(bitmap);
+     } catch (IOException e) {
+         Log.d("Debug", "sowmuch:exception at selecting image gallery:"+e.getMessage());
+         Toast.makeText(getApplicationContext(), "Error in selecting image, please try again", Toast.LENGTH_LONG).show();
+         e.printStackTrace();
+     }
 
  }
  }

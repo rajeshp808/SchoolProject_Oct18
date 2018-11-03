@@ -1,8 +1,14 @@
 package com.rajesh.zphschoolemani;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,28 +19,45 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class LoginPage extends AppCompatActivity {
 
     EditText et_phone;
     EditText et_Name;
     Button bt_save_details;
+    private static final int GALLERY_REQUEST_CODE = 3;
+    ImageButton ib_add_profpic;
     private static final int PERMISSION_REQUEST_CODE = 1;
     String saveData = "";
     String str_Year_of_SCC = "";
     Spinner spin_ssc_year;
     boolean kyc_on = false;
+    private Uri uri_img = null;
+    ProgressDialog pd_addprofile;
+    private StorageReference storageRef;
+    private DatabaseReference rootRef;
+    private FirebaseDatabase database ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +65,25 @@ public class LoginPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         checkAppPermissions();
         requestPermission();
+        database = FirebaseDatabase.getInstance();
+        rootRef = database.getReference("Alumn_List");
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReferenceFromUrl("gs://zphschoolemani-d3d13.appspot.com");
         setContentView(R.layout.activity_login_page);
         et_phone = findViewById(R.id.et_phno);
         et_Name = findViewById(R.id.et_Name);
-        //TODO delete this ssc year..
+        ib_add_profpic=findViewById(R.id.ib_add_prof_pic);
+        pd_addprofile = new ProgressDialog(this);
+        ib_add_profpic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(getApplicationContext(), "Select pic to upload", Toast.LENGTH_LONG).show();
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(Intent.createChooser(galleryIntent, "Select Picture"), GALLERY_REQUEST_CODE);
+            }
+        });
         //et_SSC_Year=findViewById(R.id.et_Name);;
         spin_ssc_year = findViewById(R.id.spinner_ssc);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -63,9 +101,7 @@ public class LoginPage extends AppCompatActivity {
                 // First item is disable and it is used for hint
                 if (position > 0) {
                     // Notify the selected item text
-                    Toast.makeText
-                            (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                            .show();
+                    Log.d("Debug", "sowmuch ssc year selected: "+selectedItemText);
                     str_Year_of_SCC = selectedItemText;
                 } else {
 
@@ -89,25 +125,98 @@ public class LoginPage extends AppCompatActivity {
                         (!str_Year_of_SCC.equals(""))) {
                     //Write user details to DB
                     // Write a message to the database
-                    String phoneNumber = et_phone.getText().toString();
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference rootRef = database.getReference("Alumn_List");
-                    DatabaseReference usersRef = rootRef.child(phoneNumber);
 
-                    saveData = et_phone.getText() + "#" + et_Name.getText();
+                    Toast.makeText(getApplicationContext(), "Write user details to DB", Toast.LENGTH_SHORT).show();
+                    try{
+                        final String phoneNumber = et_phone.getText().toString();
 
-                    //myRef.setValue(et_Name.getText().toString(),et_SSC_Year.getText().toString());
-                    Map<String, Object> taskMap = new HashMap<>();
-                    //taskMap.put("PhNo",phoneNumber);
-                    taskMap.put("FullName", et_Name.getText().toString());
-                    taskMap.put("SSC_Year", str_Year_of_SCC);
-                    //taskMap.put("age", "45");
-                    //taskMap.put("gender", "female");
 
-                    usersRef.updateChildren(taskMap);
-                    Toast.makeText(getApplicationContext(), "Thank you " + et_Name.getText() + "", Toast.LENGTH_LONG).show();
-                    markKYCDone();
-                    finish();
+                    final String profpic_downloadable_URL = "";
+                    pd_addprofile.setTitle("Saving your Profile...");
+                    pd_addprofile.show();
+
+                    final String randomString = UUID.randomUUID().toString();
+                     StorageReference ref = storageRef.child("profilepics/" + randomString);
+                        saveData = et_phone.getText() + "#" + et_Name.getText();
+                    if (uri_img != null && !uri_img.equals("")) {
+                        Toast.makeText(getApplicationContext(), "upload started " + et_Name.getText() + "", Toast.LENGTH_LONG).show();
+
+                        ref.putFile(uri_img)
+                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        try {
+                                            if (pd_addprofile != null && pd_addprofile.isShowing()) {
+                                                pd_addprofile.dismiss();
+                                            }
+                                            Log.d("Debug", "sowmuch: starting upload");
+                                            Toast.makeText(getApplicationContext(), "upload success " + et_Name.getText() + "", Toast.LENGTH_LONG).show();
+                                            Uri profpic_downloadable_URL;
+                                            Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                                            while (!urlTask.isSuccessful()) ;
+                                            profpic_downloadable_URL = urlTask.getResult();
+
+                                            Log.d("Debug", "sowmuch: profpic_downloadable_URL is ready ="+profpic_downloadable_URL);
+                                             DatabaseReference usersRef = rootRef.child(phoneNumber);
+                                            //myRef.setValue(et_Name.getText().toString(),et_SSC_Year.getText().toString());
+                                            Map<String, Object> taskMap = new HashMap<>();
+                                            //taskMap.put("PhNo",phoneNumber);
+                                            taskMap.put("FullName", et_Name.getText().toString());
+                                            taskMap.put("SSC_Year", str_Year_of_SCC);
+                                            taskMap.put("ProfPic_URL", profpic_downloadable_URL.toString());
+                                            usersRef.updateChildren(taskMap);
+                                            Log.d("Debug", "sowmuch: db update is done ="+taskMap.toString());
+                                            Toast.makeText(getApplicationContext(), "Thank you " + et_Name.getText() + "", Toast.LENGTH_LONG).show();
+
+
+                                        } catch (Exception ex) {
+                                            Toast.makeText(getApplicationContext(), "sowmuch exception in creating your profile" + ex.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        pd_addprofile.dismiss();
+                                        Toast.makeText(getApplicationContext(), "Failed to load your profile pin into database " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                                .getTotalByteCount());
+                                        Log.d("Debug", "sowmuch: uploading in progress="+progress);
+                                        pd_addprofile.setMessage("Uploading profile" + (int) progress + "%");
+                                    }
+                                }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                    Log.d("Debug", "sowmuch: task is fully completed");
+
+                            }
+                        });
+                        markKYCDone();
+                        finish();
+
+                    } else {
+
+                        DatabaseReference usersRef = rootRef.child(phoneNumber);
+                        Map<String, Object> taskMap = new HashMap<>();
+                        taskMap.put("FullName", et_Name.getText().toString());
+                        taskMap.put("SSC_Year", str_Year_of_SCC);
+                        taskMap.put("ProfPic_URL", "");
+                        usersRef.updateChildren(taskMap);
+                        Toast.makeText(getApplicationContext(), "Thank you " + et_Name.getText() + "", Toast.LENGTH_LONG).show();
+                        markKYCDone();
+                        finish();
+                    }
+                } catch (Exception ex) {
+                        Log.d("Debug", "sowmuch2: exception"+ex.getMessage());
+                    Toast.makeText(getApplicationContext(), "sowmuch exception in creating your profile" + ex.getMessage(), Toast.LENGTH_LONG).show();
+
+                }
+
                 } else {
                     Toast.makeText(getApplicationContext(), "Dear  " + et_Name.getText() + ", Please enter all details.", Toast.LENGTH_LONG).show();
                 }
@@ -117,7 +226,11 @@ public class LoginPage extends AppCompatActivity {
         });
 
     }
-
+    @Override
+    protected void onDestroy() {
+        pd_addprofile.dismiss();
+        super.onDestroy();
+    }
     private void markKYCDone() {
         // MainActivity mainActivity = new MainActivity();
         //mainActivity.checkAppPermissions();
@@ -166,6 +279,25 @@ public class LoginPage extends AppCompatActivity {
         } else {
             //If the app doesn’t have this permission, then return false//
             return false;
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //image from gallery result
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK){
+            uri_img = data.getData();
+            ib_add_profpic.setImageURI(uri_img);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri_img);
+                // Log.d(TAG, String.valueOf(bitmap));
+
+                ib_add_profpic.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                Toast.makeText(getApplicationContext(), "Error in selecting image, please try again", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+
         }
     }
 }

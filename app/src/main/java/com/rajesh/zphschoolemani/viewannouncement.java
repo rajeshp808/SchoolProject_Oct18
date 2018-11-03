@@ -34,7 +34,8 @@ public class viewannouncement extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setHasFixedSize(true);
             mDatabase = FirebaseDatabase.getInstance().getReference().child("Announcements");
-            mDatabase.keepSynced(true);
+            //disabling keepsync feature to enable offline save feature
+            //mDatabase.keepSynced(true);
 
             Log.d("sowmore", "starting");
         }catch (Exception ex) {

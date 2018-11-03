@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -105,7 +106,9 @@ public class add_announcement extends AppCompatActivity {
                                         taskMap.put("Announcement_Title_Description", textDesc.getText().toString());
                                         taskMap.put("File_URL", downloadURL.toString());
                                         newsItem.updateChildren(taskMap);
-                                        pd_postnews.dismiss();
+                                        if (pd_postnews != null && pd_postnews.isShowing()) {
+                                            pd_postnews.dismiss();
+                                        }
                                         Toast.makeText(add_announcement.this, "Upload completed", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
@@ -131,6 +134,7 @@ public class add_announcement extends AppCompatActivity {
                 }
             });
         } catch (Exception ex) {
+            Log.d("Debug", "sowmuch:add_announcement exception:"+ex.getMessage());
             Toast.makeText(getApplicationContext(), "Exception at post announcement "+ex.getMessage(), Toast.LENGTH_LONG).show();
             ex.printStackTrace();
         }

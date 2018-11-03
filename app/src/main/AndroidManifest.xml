@@ -27,7 +27,7 @@
         <activity android:name=".postnews" />
         <activity android:name=".viewnews" />
         <activity android:name=".viewannouncement" />
-
+        <activity android:name=".alumnhome"></activity>
     </application>
 
 </manifest>

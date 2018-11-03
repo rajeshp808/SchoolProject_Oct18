@@ -34,7 +34,8 @@ public class viewnews extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setHasFixedSize(true);
             mDatabase = FirebaseDatabase.getInstance().getReference().child("News");
-            mDatabase.keepSynced(true);
+            //disabling keepsync feature to enable offline save feature
+            //mDatabase.keepSynced(true);
             Log.d("sowmore", "starting");
         }catch (Exception ex) {
             Log.d("sowmuch4", "error in onCreate"+ex.getMessage());
