@@ -8,21 +8,26 @@ import android.support.v7.widget.LinearLayoutManager;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
 
 
 public class viewannouncement extends AppCompatActivity {
     private RecyclerView recyclerView;
     private DatabaseReference mDatabase;
+    private FirebaseRecyclerAdapter<Announcementdata, AnnouncementdataViewHolder> newfirebaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +39,29 @@ public class viewannouncement extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setHasFixedSize(true);
             mDatabase = FirebaseDatabase.getInstance().getReference().child("Announcements");
+
             //disabling keepsync feature to enable offline save feature
             //mDatabase.keepSynced(true);
+            Query newsQuery = mDatabase.orderByKey();
+            FirebaseRecyclerOptions newsOptions = new FirebaseRecyclerOptions.Builder<Announcementdata>().setQuery(newsQuery, Announcementdata.class).build();
 
+            newfirebaseAdapter = new FirebaseRecyclerAdapter<Announcementdata, AnnouncementdataViewHolder>(newsOptions) {
+                @Override
+                protected void onBindViewHolder(AnnouncementdataViewHolder holder, int position, Announcementdata model) {
+                    holder.setTitle(model.getAnnouncement_Title());
+                    holder.setDescription(model.getAnnouncement_Title_Description());
+                    holder.setImage(getApplicationContext(), model.getFile_URL());
+                }
+
+                @Override
+                public AnnouncementdataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+                    View view = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.activity_announcement_card, parent, false);
+
+                    return new AnnouncementdataViewHolder(view);
+                }
+            };
             Log.d("sowmore", "starting");
         }catch (Exception ex) {
             Log.d("sowmuch4", "error in onCreate"+ex.getMessage());
@@ -49,23 +74,14 @@ public class viewannouncement extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
+        newfirebaseAdapter.startListening();
+        recyclerView.setAdapter(newfirebaseAdapter);
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        newfirebaseAdapter.stopListening();
 
-        FirebaseRecyclerAdapter<Announcementdata,AnnouncementdataViewHolder> adapter = new FirebaseRecyclerAdapter<Announcementdata, AnnouncementdataViewHolder>
-                (Announcementdata.class,R.layout.activity_announcement_card,AnnouncementdataViewHolder.class,mDatabase) {
-
-            @Override
-            protected void populateViewHolder(AnnouncementdataViewHolder viewHolder, Announcementdata model, int position) {
-                try {
-                    viewHolder.setTitle(model.getAnnouncement_Title());
-                    viewHolder.setDescription(model.getAnnouncement_Title_Description());
-
-                    viewHolder.setImage(getApplicationContext(), model.getFile_URL());
-                } catch (Exception ex) {
-                    Log.d("sowmuch3", "error in populateViewHolder"+ex.getMessage());
-                    ex.printStackTrace();
-                }
-            }};
-        recyclerView.setAdapter(adapter);
     }
 
     public static class AnnouncementdataViewHolder extends RecyclerView.ViewHolder {

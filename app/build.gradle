@@ -5,10 +5,10 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.rajesh.zphschoolemani"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
-        versionCode 5
-        versionName "5.0"
+        versionCode 6
+        versionName "6.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,9 +33,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'com.google.firebase:firebase-storage:16.0.1'
     implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.firebaseui:firebase-ui-database:0.4.0'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+    implementation 'com.firebaseui:firebase-ui-database:4.1.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
 }
 apply plugin: 'com.google.gms.google-services'

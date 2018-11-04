@@ -5,14 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".alumnhome">
-
+    <!--<android.support.v7.widget.Toolbar
+        android:id="@+id/home_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#8233e9"/>  -->
     <ImageView
         android:id="@+id/iv_profiletop"
         android:layout_width="match_parent"
         android:layout_height="190dp"
-        android:scaleType="fitCenter"
         android:background="#98acd4"
-        android:contentDescription="@string/profile_home_wall" />
+        android:contentDescription="@string/profile_home_wall"
+        app:srcCompat="@drawable/hd_assembly"/>
 
     <LinearLayout
         android:id="@+id/linear_top1"
@@ -32,11 +36,11 @@
 
             <ImageView
                 android:id="@+id/iv_profile_pic_holder"
-                android:layout_width="130dp"
+                android:layout_width="wrap_content"
                 android:layout_height="120dp"
-                android:scaleType="fitCenter"
+                android:scaleType="centerInside"
                 android:contentDescription="@string/profile_home_wall"
-                android:background="#a81c00f4" />
+                 />
 
             <TextView
                 android:id="@+id/tv_profile_name"
@@ -61,12 +65,15 @@
                 android:layout_width="0dp"
                 android:orientation="vertical"
                 android:layout_height="match_parent">
+
                 <ImageButton
                     android:id="@+id/ib_prof_menu1"
-                    android:background="#180979"
                     android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:background="#180979"
+                    android:scaleType="centerInside"
                     android:contentDescription="@string/profile_home_wall"
-                    android:layout_height="120dp" />
+                    android:src="@drawable/alumnblue" />
                 <ImageButton
                     android:id="@+id/ib_prof_menu3"
                     android:layout_marginTop="20dp"
@@ -89,13 +96,16 @@
                     android:layout_width="120dp"
                     android:contentDescription="@string/profile_home_wall"
                     android:layout_height="120dp" />
+
                 <ImageButton
                     android:id="@+id/ib_prof_menu4"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:layout_marginTop="20dp"
                     android:background="#180979"
-                    android:layout_width="120dp"
+                    android:scaleType="fitCenter"
                     android:contentDescription="@string/profile_home_wall"
-                    android:layout_height="120dp" />
+                    android:src="@drawable/map2" />
 
             </LinearLayout>
 
