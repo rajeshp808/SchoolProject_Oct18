@@ -2,14 +2,14 @@ package com.rajesh.zphschoolemani;
 
 public class student {
     private String fullname;
-    private String ssc;
+    private String sscyear;
 
     public student() {
     }
 
-    public student(String fullname, String ssc) {
+    public student(String fullname, String sscyear) {
         this.fullname = fullname;
-        this.ssc = ssc;
+        this.sscyear = sscyear;
     }
 
     public String getFullname() {
@@ -20,11 +20,11 @@ public class student {
         this.fullname = fullname;
     }
 
-    public String getSsc() {
-        return ssc;
+    public String getSscyear() {
+        return sscyear;
     }
 
-    public void setSsc(String ssc) {
-        this.ssc = ssc;
+    public void setSscyear(String sscyear) {
+        this.sscyear = sscyear;
     }
 }

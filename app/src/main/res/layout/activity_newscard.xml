@@ -21,20 +21,24 @@
 
         <ImageView
             android:id="@+id/imageView4"
-            android:layout_width="match_parent"
-            android:layout_height="261dp"
+            android:layout_width="wrap_content"
+            android:layout_height="260dp"
             android:contentDescription="@string/about"
-            android:drawingCacheQuality="high"
+            android:scaleType="fitXY"
             android:fadingEdge="vertical"
-            android:scaleType="fitCenter"
+            android:fadingEdgeLength="5dp"
             android:textColor="#6f79d6"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
         <TextView
             android:id="@+id/tv_nc_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/nc_text_title"
+            android:layout_marginLeft="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="5dp"
+            android:layout_marginRight="5dp"
             android:textColor="#01020d"
             android:textSize="20sp"
             android:visibility="visible" />
@@ -44,7 +48,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/tv_nc_description"
-
+            android:layout_marginLeft="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="5dp"
+            android:layout_marginRight="5dp"
             android:textColor="#01020d"
             android:visibility="visible" />
 

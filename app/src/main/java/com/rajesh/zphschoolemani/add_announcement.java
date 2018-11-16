@@ -102,9 +102,9 @@ public class add_announcement extends AppCompatActivity {
                                         downloadURL = urlTask.getResult();
                                         DatabaseReference newsItem = databaseRef.child(randomString);
                                         Map<String, Object> taskMap = new HashMap<>();
-                                        taskMap.put("Announcement_Title", textTitle.getText().toString());
-                                        taskMap.put("Announcement_Title_Description", textDesc.getText().toString());
-                                        taskMap.put("File_URL", downloadURL.toString());
+                                        taskMap.put("title", textTitle.getText().toString());
+                                        taskMap.put("description", textDesc.getText().toString());
+                                        taskMap.put("url", downloadURL.toString());
                                         newsItem.updateChildren(taskMap);
                                         if (pd_postnews != null && pd_postnews.isShowing()) {
                                             pd_postnews.dismiss();

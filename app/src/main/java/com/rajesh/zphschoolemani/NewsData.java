@@ -1,34 +1,34 @@
 package com.rajesh.zphschoolemani;
 
 public class Newsdata {
-    private String News_Title, News_Description, File_URL;
+    private String title, description, url;
 
     // generate their respective constructors
-    public Newsdata(String News_Title, String News_Description, String File_URL) {
-        this.News_Title = News_Title;
-        this.News_Description = News_Description;
-        this.File_URL=File_URL;
+    public Newsdata(String title, String description, String url) {
+        this.title = title;
+        this.description = description;
+        this.url=url;
     }
     // create an empty constructor
     public Newsdata() {
     }
-    public void setFile_URL(String File_URL) {
-        this.File_URL = File_URL;
+    public void seturl(String url) {
+        this.url = url;
     }
-    public void setNews_Title(String News_Title) {
-        this.News_Title = News_Title;
+    public void settitle(String title) {
+        this.title = title;
     }
-    public void setNews_Description(String News_Description) {
-        this.News_Description = News_Description;
+    public void setdescription(String News_Description) {
+        this.description = News_Description;
     }
-    public String getFile_URL() {
-        return File_URL;
+    public String geturl() {
+        return url;
     }
-    public String getNews_Title() {
-        return News_Title;
+    public String gettitle() {
+        return title;
     }
-    public String getNews_Description() {
-        return News_Description;
+    public String getdescription() {
+        return description;
     }
 
 }

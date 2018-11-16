@@ -66,7 +66,7 @@ public class LoginPage extends AppCompatActivity {
         checkAppPermissions();
         requestPermission();
         database = FirebaseDatabase.getInstance();
-        rootRef = database.getReference("Alumn_List");
+        rootRef = database.getReference("alumn_list");
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageRef = storage.getReferenceFromUrl("gs://zphschoolemani-d3d13.appspot.com");
         setContentView(R.layout.activity_login_page);
@@ -161,9 +161,9 @@ public class LoginPage extends AppCompatActivity {
                                             //myRef.setValue(et_Name.getText().toString(),et_SSC_Year.getText().toString());
                                             Map<String, Object> taskMap = new HashMap<>();
                                             //taskMap.put("PhNo",phoneNumber);
-                                            taskMap.put("FullName", et_Name.getText().toString());
-                                            taskMap.put("SSC_Year", str_Year_of_SCC);
-                                            taskMap.put("ProfPic_URL", profpic_downloadable_URL.toString());
+                                            taskMap.put("fullname", et_Name.getText().toString());
+                                            taskMap.put("sscyear", str_Year_of_SCC);
+                                            taskMap.put("profpicurl", profpic_downloadable_URL.toString());
                                             usersRef.updateChildren(taskMap);
                                             Log.d("Debug", "sowmuch: db update is done ="+taskMap.toString());
                                             Toast.makeText(getApplicationContext(), "Thank you " + et_Name.getText() + "", Toast.LENGTH_LONG).show();

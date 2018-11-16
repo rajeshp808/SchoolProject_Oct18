@@ -41,6 +41,9 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    public static String CHANNEL_ID="ZPHSchoolEmani";
+    public static String CHANNEL_Name="ZPHSchool Emani";
+    public static String CHANNEL_Desc="ZPHSchool Emani Notification";
 
     private static final int PERMISSION_REQUEST_CODE = 1;
     ImageButton ib_alumn;

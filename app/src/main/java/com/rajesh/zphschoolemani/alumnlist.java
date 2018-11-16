@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class alumnlist extends AppCompatActivity {
     private  ListView lv_alumnList;
     private DatabaseReference mDatabase;
-
+    private FirebaseListOptions<student> options;
     private FirebaseListAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +31,9 @@ public class alumnlist extends AppCompatActivity {
         try {
             Toast.makeText(getApplicationContext(), "alumn List started", Toast.LENGTH_LONG).show();
             lv_alumnList = (ListView) findViewById(R.id.listview_alumn);
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("Alumn_List");
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("alumn_list");
             Query alumnQuery = mDatabase.orderByKey();
-            FirebaseListOptions<student> options = new FirebaseListOptions.Builder<student>().setLayout(R.layout.student)
+             options = new FirebaseListOptions.Builder<student>().setLayout(R.layout.student)
                     .setLifecycleOwner(alumnlist.this)
                     .setQuery(alumnQuery, student.class).build();
             adapter = new FirebaseListAdapter(options) {
@@ -43,7 +43,7 @@ public class alumnlist extends AppCompatActivity {
                     TextView SSC_Year = v.findViewById(R.id.tv_ssc_year);
                     student std = (student) model;
                     FullName.setText(std.getFullname().toString());
-                    SSC_Year.setText(std.getSsc().toString());
+                    SSC_Year.setText(std.getSscyear().toString());
                 }
             };
         }catch (Exception ex) {

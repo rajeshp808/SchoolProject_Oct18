@@ -24,9 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="261dp"
             android:contentDescription="@string/about"
-            android:drawingCacheQuality="high"
+            android:scaleType="fitXY"
             android:fadingEdge="vertical"
-            android:scaleType="fitCenter"
+            android:fadingEdgeLength="5dp"
             android:textColor="#6f79d6"
             android:visibility="visible" />
 

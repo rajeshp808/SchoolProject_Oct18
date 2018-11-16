@@ -49,16 +49,16 @@ public class alumnhome extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(getApplicationContext(), "going alumn list", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(alumnhome.this, alumnlist.class));
+                Toast.makeText(getApplicationContext(), " alumn list to be done", Toast.LENGTH_LONG).show();
+                //startActivity(new Intent(alumnhome.this, alumnlist.class));
             }
         });
         alumnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(getApplicationContext(), "going alumn mapview", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(alumnhome.this, alumnlist.class));
+                Toast.makeText(getApplicationContext(), " alumn mapview to be done", Toast.LENGTH_LONG).show();
+                //startActivity(new Intent(alumnhome.this, alumnlist.class));
             }
         });
         try {
@@ -66,7 +66,7 @@ public class alumnhome extends AppCompatActivity {
 
             final String phone_key = intent.getStringExtra("phone_key");
             imgview_profpic = (ImageView) findViewById(R.id.iv_profile_pic_holder);
-            refDatabase = FirebaseDatabase.getInstance().getReference().child("Alumn_List");
+            refDatabase = FirebaseDatabase.getInstance().getReference().child("alumn_list");
 
             //refDatabase = fDatabase.getReference().child("Alumn_List").child(phone_key).child("ProfPic_URL");
 
@@ -84,7 +84,7 @@ public class alumnhome extends AppCompatActivity {
 
                        if((singleSnapshot.getKey()).equals(phone_key)){
                           // Toast.makeText(getApplicationContext(), "user value 666 found"+singleSnapshot.toString(), Toast.LENGTH_LONG).show();
-                            String profile_pic_url=(String) singleSnapshot.child("ProfPic_URL").getValue();
+                            String profile_pic_url=(String) singleSnapshot.child("profpicurl").getValue();
                            profile_pic_url = profile_pic_url.replaceAll("^\"|\"$", "");
                            Picasso.with(getApplicationContext()).load(profile_pic_url).into(imgview_profpic);
                            Log.e("Debug", "Sowmuch_actual url is" + profile_pic_url);

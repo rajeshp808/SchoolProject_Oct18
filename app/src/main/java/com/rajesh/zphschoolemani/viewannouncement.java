@@ -48,9 +48,9 @@ public class viewannouncement extends AppCompatActivity {
             newfirebaseAdapter = new FirebaseRecyclerAdapter<Announcementdata, AnnouncementdataViewHolder>(newsOptions) {
                 @Override
                 protected void onBindViewHolder(AnnouncementdataViewHolder holder, int position, Announcementdata model) {
-                    holder.setTitle(model.getAnnouncement_Title());
-                    holder.setDescription(model.getAnnouncement_Title_Description());
-                    holder.setImage(getApplicationContext(), model.getFile_URL());
+                    holder.setTitle(model.getTitle());
+                    holder.setDescription(model.getDescription());
+                    holder.setImage(getApplicationContext(), model.getUrl());
                 }
 
                 @Override
@@ -92,29 +92,29 @@ public class viewannouncement extends AppCompatActivity {
             mView = itemView;
         }
 
-        public void setTitle (String Announcement_Title) {
+        public void setTitle (String title) {
             try {
                 TextView tv_nc_title = (TextView) mView.findViewById(R.id.tv_announce_title);
-                tv_nc_title.setText(Announcement_Title);
+                tv_nc_title.setText(title);
 
             }catch (Exception ex) {
                 Log.d("sowmuch", "error in setting title"+ex.getMessage());
                 ex.printStackTrace();
             }
         }
-        public void setDescription (String Announcement_Title_Description){
+        public void setDescription (String description){
             try {
                 TextView tv_nc_description = (TextView) mView.findViewById(R.id.tv_announce_description);
-                tv_nc_description.setText(Announcement_Title_Description);
+                tv_nc_description.setText(description);
             }catch (Exception ex) {
                 Log.d("sowmuch2", "error in setting desc"+ex.getMessage());
                 ex.printStackTrace();
             }
         }
-        public void setImage (Context ctx, String File_URL){
+        public void setImage (Context ctx, String url){
             ImageView imageView4 = (ImageView) mView.findViewById(R.id.img_announce);
 
-            Picasso.with(ctx).load(File_URL).into(imageView4);
+            Picasso.with(ctx).load(url).into(imageView4);
         }
 
     }

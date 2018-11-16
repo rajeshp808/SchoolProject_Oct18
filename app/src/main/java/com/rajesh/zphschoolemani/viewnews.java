@@ -46,10 +46,10 @@ public class viewnews extends AppCompatActivity {
              newfirebaseAdapter = new FirebaseRecyclerAdapter<Newsdata, NewsdataViewHolder>(newsOptions){
                  @Override
                  protected void onBindViewHolder(NewsdataViewHolder holder, int position, Newsdata model) {
-                     holder.setTitle(model.getNews_Title());
-                     holder.setDescription(model.getNews_Description());
+                     holder.setTitle(model.gettitle());
+                     holder.setDescription(model.getdescription());
 
-                     holder.setImage(getApplicationContext(), model.getFile_URL());
+                     holder.setImage(getApplicationContext(), model.geturl());
                  }
 
                  @Override
@@ -93,29 +93,29 @@ public class viewnews extends AppCompatActivity {
            mView = itemView;
      }
 
-           public void setTitle (String News_Title) {
+           public void setTitle (String title) {
                try {
                    TextView tv_nc_title = (TextView) mView.findViewById(R.id.tv_nc_title);
-                   tv_nc_title.setText(News_Title);
+                   tv_nc_title.setText(title);
 
                }catch (Exception ex) {
                    Log.d("sowmuch", "error in setting title"+ex.getMessage());
                    ex.printStackTrace();
                }
            }
-           public void setDescription (String News_Description){
+           public void setDescription (String description){
            try {
                TextView tv_nc_description = (TextView) mView.findViewById(R.id.tv_nc_description);
-               tv_nc_description.setText(News_Description);
+               tv_nc_description.setText(description);
            }catch (Exception ex) {
                Log.d("sowmuch2", "error in setting desc"+ex.getMessage());
                ex.printStackTrace();
            }
        }
-           public void setImage (Context ctx, String File_URL){
+           public void setImage (Context ctx, String url){
            ImageView imageView4 = (ImageView) mView.findViewById(R.id.imageView4);
 
-           Picasso.with(ctx).load(File_URL).into(imageView4);
+           Picasso.with(ctx).load(url).into(imageView4);
        }
 
    }
