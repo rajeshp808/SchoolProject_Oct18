@@ -33,7 +33,7 @@ public class add_announcement extends AppCompatActivity {
     private ImageButton imageBtn;
     private static final int GALLERY_REQUEST_CODE = 2;
     private Uri uri = null;
-    private EditText textTitle; private EditText textDesc;
+    private EditText textTitle; private EditText textDesc,tv_postannounce;
     private Button postBtn;
     private FirebaseDatabase database;
     private DatabaseReference databaseRef;
@@ -53,6 +53,7 @@ public class add_announcement extends AppCompatActivity {
             postBtn = (Button) findViewById(R.id.bt_ann_postbutton);
             textDesc = (EditText) findViewById(R.id.et_Ann_Description);
             textTitle = (EditText) findViewById(R.id.et_Ann_Title);
+            tv_postannounce= (EditText) findViewById(R.id.tv_post_ann);
             FirebaseStorage storage = FirebaseStorage.getInstance();
             storageRef= storage.getReferenceFromUrl("gs://zphschoolemani-d3d13.appspot.com");
             database = FirebaseDatabase.getInstance();
@@ -89,8 +90,8 @@ public class add_announcement extends AppCompatActivity {
 
                         pd_postnews.setTitle("Uploading...");
                         pd_postnews.show();
-                        final String randomString=UUID.randomUUID().toString();
-                        final StorageReference ref = storageRef.child("announcement_img/"+ randomString);
+                        final String serialString=tv_postannounce.getText().toString();
+                        final StorageReference ref = storageRef.child("announcement_img/"+ serialString);
                         ref.putFile(uri)
                                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
@@ -100,7 +101,7 @@ public class add_announcement extends AppCompatActivity {
                                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                                         while (!urlTask.isSuccessful());
                                         downloadURL = urlTask.getResult();
-                                        DatabaseReference newsItem = databaseRef.child(randomString);
+                                        DatabaseReference newsItem = databaseRef.child(serialString);
                                         Map<String, Object> taskMap = new HashMap<>();
                                         taskMap.put("title", textTitle.getText().toString());
                                         taskMap.put("description", textDesc.getText().toString());

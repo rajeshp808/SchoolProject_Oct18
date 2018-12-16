@@ -44,10 +44,13 @@
 
             <TextView
                 android:id="@+id/tv_profile_name"
+                style="@android:style/Widget.DeviceDefault.TextView.SpinnerItem"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:text="@string/profile_name"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="#06068c"
+                android:textColorHighlight="@color/colorScrollBar" />
 
 
         </LinearLayout>

@@ -27,6 +27,7 @@
             android:scaleType="fitXY"
             android:fadingEdge="vertical"
             android:fadingEdgeLength="5dp"
+            android:drawingCacheQuality="high"
             android:textColor="#6f79d6"
             android:visibility="visible" />
 

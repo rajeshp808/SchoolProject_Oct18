@@ -1,5 +1,6 @@
 package com.rajesh.zphschoolemani;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -27,12 +28,18 @@ import com.squareup.picasso.Picasso;
 public class viewannouncement extends AppCompatActivity {
     private RecyclerView recyclerView;
     private DatabaseReference mDatabase;
+    private ProgressDialog loadPD;
     private FirebaseRecyclerAdapter<Announcementdata, AnnouncementdataViewHolder> newfirebaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewannouncement);
+
+        loadPD=new ProgressDialog(viewannouncement.this);
+        loadPD.setTitle("Loading Announcements ");
+        loadPD.setMessage("Please wait..");
+        loadPD.show();
         //initialize recyclerview and FIrebase objects
         try {
             recyclerView = (RecyclerView) findViewById(R.id.id_recycle_announce);
@@ -52,7 +59,17 @@ public class viewannouncement extends AppCompatActivity {
                     holder.setDescription(model.getDescription());
                     holder.setImage(getApplicationContext(), model.getUrl());
                 }
+                @Override
+                public void onDataChanged() {
+                    super.onDataChanged();
+                    if(loadPD.isShowing() && loadPD !=null) {
 
+                        loadPD.dismiss();
+                        Log.d("sowmuch", " progress dialog is closed");
+                    } else {
+                        Log.d("sowmuch", " progress dialog is not showing");
+                    }
+                }
                 @Override
                 public AnnouncementdataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 

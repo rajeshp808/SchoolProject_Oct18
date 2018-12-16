@@ -1,5 +1,6 @@
 package com.rajesh.zphschoolemani;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -28,10 +29,16 @@ public class viewnews extends AppCompatActivity {
     private RecyclerView recyclerView;
     private DatabaseReference mDatabase;
     private FirebaseRecyclerAdapter<Newsdata, NewsdataViewHolder> newfirebaseAdapter;
+    private ProgressDialog loadPD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loadPD=new ProgressDialog(viewnews.this);
+        loadPD.setProgressStyle(1);
+        loadPD.setTitle("Loading News ");
+        loadPD.setMessage("Please wait..");
+        loadPD.show();
         setContentView(R.layout.activity_viewnews);
         //initialize recyclerview and FIrebase objects
         try {
@@ -39,9 +46,11 @@ public class viewnews extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setHasFixedSize(true);
             mDatabase = FirebaseDatabase.getInstance().getReference().child("News");
+
             //disabling keepsync feature to enable offline save feature
             //mDatabase.keepSynced(true);
             Query newsQuery = mDatabase.orderByKey();
+
             FirebaseRecyclerOptions newsOptions = new FirebaseRecyclerOptions.Builder<Newsdata>().setQuery(newsQuery, Newsdata.class).build();
              newfirebaseAdapter = new FirebaseRecyclerAdapter<Newsdata, NewsdataViewHolder>(newsOptions){
                  @Override
@@ -50,6 +59,18 @@ public class viewnews extends AppCompatActivity {
                      holder.setDescription(model.getdescription());
 
                      holder.setImage(getApplicationContext(), model.geturl());
+                 }
+
+                 @Override
+                 public void onDataChanged() {
+                     super.onDataChanged();
+                     if(loadPD.isShowing() && loadPD !=null) {
+
+                         loadPD.dismiss();
+                         Log.d("sowmuch", " progress dialog is closed");
+                     } else {
+                         Log.d("sowmuch", " progress dialog is not showing");
+                     }
                  }
 
                  @Override
@@ -76,7 +97,10 @@ public class viewnews extends AppCompatActivity {
         super.onStart();
 
         newfirebaseAdapter.startListening();
+
         recyclerView.setAdapter(newfirebaseAdapter);
+
+
     }
     @Override
     public void onStop() {
@@ -85,7 +109,7 @@ public class viewnews extends AppCompatActivity {
 
     }
 
-   public static class NewsdataViewHolder extends RecyclerView.ViewHolder {
+    public static class NewsdataViewHolder extends RecyclerView.ViewHolder {
        View mView;
 
        public NewsdataViewHolder( View itemView) {

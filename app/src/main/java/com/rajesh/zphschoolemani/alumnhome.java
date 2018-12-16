@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -34,17 +35,21 @@ public class alumnhome extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 1;
     private ImageView imgview_profpic;
-    private FirebaseDatabase fDatabase;
     private DatabaseReference refDatabase;
     private ImageButton alumnList;
     private ImageButton alumnMap;
+    private  String phone_key;
+    private TextView tv_profName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alumnhome);
+        Intent intent = getIntent();
+        phone_key = intent.getStringExtra("phone_key");
         alumnList=(ImageButton) findViewById(R.id.ib_prof_menu1);
         alumnMap=(ImageButton) findViewById(R.id.ib_prof_menu4);
+        tv_profName=(TextView) findViewById(R.id.tv_profile_name);
         alumnList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,16 +61,18 @@ public class alumnhome extends AppCompatActivity {
         alumnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(alumnhome.this, mapview.class);
+                intent.putExtra("phone_key", phone_key);
+                startActivity(intent);
 
-                Toast.makeText(getApplicationContext(), " alumn mapview to be done", Toast.LENGTH_LONG).show();
-                //startActivity(new Intent(alumnhome.this, alumnlist.class));
+
             }
         });
         try {
-            Intent intent = getIntent();
 
-            final String phone_key = intent.getStringExtra("phone_key");
+
             imgview_profpic = (ImageView) findViewById(R.id.iv_profile_pic_holder);
+
             refDatabase = FirebaseDatabase.getInstance().getReference().child("alumn_list");
 
             //refDatabase = fDatabase.getReference().child("Alumn_List").child(phone_key).child("ProfPic_URL");
@@ -89,6 +96,11 @@ public class alumnhome extends AppCompatActivity {
                            Picasso.with(getApplicationContext()).load(profile_pic_url).into(imgview_profpic);
                            Log.e("Debug", "Sowmuch_actual url is" + profile_pic_url);
                            //imgview_profpic.setImageBitmap(getBitmapFromURL(profile_pic_url));
+                           String fullName=(String) singleSnapshot.child("fullname").getValue();
+                           tv_profName.setText(fullName);
+                           tv_profName.setTextIsSelectable(true);
+                           tv_profName.setBackgroundColor(Color.parseColor("#8e8ef9"));
+
                         }
 
                         //Log.e("Debug", "Sowmuch_alumnhome_onDataChange= " + user);

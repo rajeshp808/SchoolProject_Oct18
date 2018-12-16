@@ -93,6 +93,8 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="postnews_head">    Post Your News</string>
     <string name="post_your_news">Post Your News</string>
+    <string name="post_news_serial">enter serial for News</string>
+    <string name="post_announce_serial">enter serial for Announcement</string>
     <string name="post_your_announcements">Post Your Announcements</string>
     <string name="ImageButton_Add">Adding image</string>
     <string name="ann_hint_description">Add Announcement description</string>
@@ -103,4 +105,6 @@
     <string name="appbar_scrolling_view_behavior">appbar_scrolling_view_behavior</string>
     <string name="profile_home_wall">zphschool_Assembly</string>
     <string name="profile_name">Your Name</string>
+    <string name="alumn_map">Alumn Map</string>
+    <string name="title_activity_mapview">Map</string>
 </resources>

@@ -37,6 +37,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -48,7 +50,7 @@ public class LoginPage extends AppCompatActivity {
     Button bt_save_details;
     private static final int GALLERY_REQUEST_CODE = 3;
     ImageButton ib_add_profpic;
-    private static final int PERMISSION_REQUEST_CODE = 1;
+    private static final int MULTI_PERMISSION_REQUEST_CODE = 1;
     String saveData = "";
     String str_Year_of_SCC = "";
     Spinner spin_ssc_year;
@@ -58,6 +60,8 @@ public class LoginPage extends AppCompatActivity {
     private StorageReference storageRef;
     private DatabaseReference rootRef;
     private FirebaseDatabase database ;
+    private String timeStamp="";
+    protected float MAX_IMAGE_SIZE=150;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,7 @@ public class LoginPage extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageRef = storage.getReferenceFromUrl("gs://zphschoolemani-d3d13.appspot.com");
         setContentView(R.layout.activity_login_page);
+        timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
         et_phone = findViewById(R.id.et_phno);
         et_Name = findViewById(R.id.et_Name);
         ib_add_profpic=findViewById(R.id.ib_add_prof_pic);
@@ -155,15 +160,17 @@ public class LoginPage extends AppCompatActivity {
                                             Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                                             while (!urlTask.isSuccessful()) ;
                                             profpic_downloadable_URL = urlTask.getResult();
-
+                                            String location_XY=getLocationDetails();
                                             Log.d("Debug", "sowmuch: profpic_downloadable_URL is ready ="+profpic_downloadable_URL);
                                              DatabaseReference usersRef = rootRef.child(phoneNumber);
                                             //myRef.setValue(et_Name.getText().toString(),et_SSC_Year.getText().toString());
                                             Map<String, Object> taskMap = new HashMap<>();
                                             //taskMap.put("PhNo",phoneNumber);
+
                                             taskMap.put("fullname", et_Name.getText().toString());
                                             taskMap.put("sscyear", str_Year_of_SCC);
                                             taskMap.put("profpicurl", profpic_downloadable_URL.toString());
+                                            taskMap.put("timestamp",timeStamp);
                                             usersRef.updateChildren(taskMap);
                                             Log.d("Debug", "sowmuch: db update is done ="+taskMap.toString());
                                             Toast.makeText(getApplicationContext(), "Thank you " + et_Name.getText() + "", Toast.LENGTH_LONG).show();
@@ -203,9 +210,10 @@ public class LoginPage extends AppCompatActivity {
 
                         DatabaseReference usersRef = rootRef.child(phoneNumber);
                         Map<String, Object> taskMap = new HashMap<>();
-                        taskMap.put("FullName", et_Name.getText().toString());
-                        taskMap.put("SSC_Year", str_Year_of_SCC);
-                        taskMap.put("ProfPic_URL", "");
+                        taskMap.put("fullname", et_Name.getText().toString());
+                        taskMap.put("sscyear", str_Year_of_SCC);
+                        taskMap.put("profpicurl", "");
+                        taskMap.put("timestamp",timeStamp);
                         usersRef.updateChildren(taskMap);
                         Toast.makeText(getApplicationContext(), "Thank you " + et_Name.getText() + "", Toast.LENGTH_LONG).show();
                         markKYCDone();
@@ -226,6 +234,14 @@ public class LoginPage extends AppCompatActivity {
         });
 
     }
+
+    private String getLocationDetails() {
+        String location_XY="";
+        //TODO write code to get locationdetails..
+
+        return  location_XY;
+    }
+
     @Override
     protected void onDestroy() {
         pd_addprofile.dismiss();
@@ -248,8 +264,9 @@ public class LoginPage extends AppCompatActivity {
     }
 
     private void requestPermission() {
-
-        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        //TODO write code request permissions for location
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_COARSE_LOCATION}, MULTI_PERMISSION_REQUEST_CODE);
     }
 
     protected void checkAppPermissions() {
@@ -290,6 +307,7 @@ public class LoginPage extends AppCompatActivity {
             ib_add_profpic.setImageURI(uri_img);
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri_img);
+                bitmap=adjustImage(bitmap,MAX_IMAGE_SIZE,true);
                 // Log.d(TAG, String.valueOf(bitmap));
 
                 ib_add_profpic.setImageBitmap(bitmap);
@@ -299,5 +317,24 @@ public class LoginPage extends AppCompatActivity {
             }
 
         }
+    }
+    /**
+     * This class used to reduced size of image
+     * @param realImage
+     * @return
+     */
+    protected Bitmap adjustImage(Bitmap realImage,float maxImageSize,
+                                 boolean filter) {
+        Log.d("Debug", "sowmuch-loginpage: realImage.getWidth()"+realImage.getWidth());
+        Log.d("Debug", "sowmuch-loginpage:  realImage.getHeight()"+ realImage.getHeight());
+        float ratio = Math.min(
+                (float) maxImageSize / realImage.getWidth(),
+                (float) maxImageSize / realImage.getHeight());
+        int width = Math.round((float) ratio * realImage.getWidth());
+        int height = Math.round((float) ratio * realImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
     }
 }
